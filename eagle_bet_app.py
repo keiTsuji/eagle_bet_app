@@ -1,7 +1,34 @@
 import streamlit as st
 import pandas as pd
 
-st.title("🏌️‍♂️ イーグル会ベット計算機")
+# -------------------------
+# CSSで number_input の数字を大きく
+# -------------------------
+st.markdown("""
+<style>
+input[type=number] {
+    font-size: 24px !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# -------------------------
+# タイトル表示（装飾あり）
+# -------------------------
+st.markdown("""
+<div style='
+    display:flex;
+    justify-content:center; /* 縦中央 */
+    align-items:center;     /* 横中央 */
+    height:120px;
+    background-color:#e0f7fa;
+    border-radius:15px;
+'>
+    <h1 style='font-size:28px; color:#00796b; margin:0; line-height:1;'>🏌️‍♂️イーグル会ベット計算機🏌️‍♂️</h1>
+</div>
+""", unsafe_allow_html=True)
+
+
 
 # プレイヤー名入力
 st.header("プレイヤー名の入力")
@@ -52,3 +79,14 @@ st.download_button(
     file_name="eagle_bet_result.csv",
     mime="text/csv"
 )
+
+# -------------------------
+# HTMLで表を装飾
+# -------------------------
+html_table = results.to_html(classes='table', border=1, justify='center')
+html_table = html_table.replace(
+    '<table border="1" class="dataframe table">',
+    '<table border="1" class="dataframe table" style="text-align:center; background-color:#fff8dc; border-radius:10px;">'
+)
+html_table = html_table.replace('<th>', '<th style="font-size:16px; background-color:#f5deb3;">')
+html_table = html_table.replace('<td>', '<td style="font-size:20px; color:black;">')  # ← ここを修正
