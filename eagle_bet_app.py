@@ -18,8 +18,8 @@ input[type=number] {
 st.markdown("""
 <div style='
     display:flex;
-    justify-content:center; /* 縦中央 */
-    align-items:center;     /* 横中央 */
+    justify-content:center;
+    align-items:center;
     height:120px;
     background-color:#e0f7fa;
     border-radius:15px;
@@ -27,7 +27,6 @@ st.markdown("""
     <h1 style='font-size:28px; color:#00796b; margin:0; line-height:1;'>🏌️‍♂️イーグル会ベット計算機🏌️‍♂️</h1>
 </div>
 """, unsafe_allow_html=True)
-
 
 
 # プレイヤー名入力
@@ -69,7 +68,23 @@ results.loc["合計"] = results.sum()
 
 st.divider()
 st.subheader("💰 計算結果")
-st.dataframe(results.style.format("{:+,}"))
+
+# =========================
+# ✅ 数字に色をつける関数
+# =========================
+def color_values(val):
+    if val > 0:
+        color = '#2e7d32'  # 緑
+    elif val < 0:
+        color = '#c62828'  # 赤
+    else:
+        color = '#555555'  # グレー
+    return f'color: {color}; font-weight:bold;'
+
+# =========================
+# 表示（色付き）
+# =========================
+st.dataframe(results.style.applymap(color_values).format("{:+,}"))
 
 # CSVダウンロード
 csv = results.to_csv(index=True).encode("utf-8-sig")
@@ -79,14 +94,3 @@ st.download_button(
     file_name="eagle_bet_result.csv",
     mime="text/csv"
 )
-
-# -------------------------
-# HTMLで表を装飾
-# -------------------------
-html_table = results.to_html(classes='table', border=1, justify='center')
-html_table = html_table.replace(
-    '<table border="1" class="dataframe table">',
-    '<table border="1" class="dataframe table" style="text-align:center; background-color:#fff8dc; border-radius:10px;">'
-)
-html_table = html_table.replace('<th>', '<th style="font-size:16px; background-color:#f5deb3;">')
-html_table = html_table.replace('<td>', '<td style="font-size:20px; color:black;">')  # ← ここを修正
